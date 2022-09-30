@@ -55,18 +55,54 @@ class _MyAppState extends State<MyApp> {
             key: _globalKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                InputField(
-                  inputController: inputController,
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InputField(
+                        inputController: inputController,
+                      ),
+                      DropdownButton<String>(
+                        items: [
+                          DropdownMenuItem(
+                              value: "Kelvin",
+                              child: Container(child: Text("Kelvin"))),
+                          DropdownMenuItem(
+                              value: "Reamur",
+                              child: Container(child: Text("Reamur"))),
+                        ],
+                        value: 'Kelvin',
+                        onChanged: (String? value) {},
+                      ),
+                      Result(
+                        kelvin: _kelvin,
+                        reamur: _reamur,
+                      ),
+                      Convert(
+                        convertHandler: _convert,
+                      ),
+                    ],
+                  ),
                 ),
-                Result(
-                  kelvin: _kelvin,
-                  reamur: _reamur,
-                ),
-                Convert(
-                  convertHandler: _convert,
-                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Text('Riwayat Konversi'),
+                      ),
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            Text('testing 1'),
+                            Text('testing 2'),
+                            Text('testing 3'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),

@@ -18,26 +18,10 @@ class Result extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('Suhu dalam Kelvin'),
+            const Text('Hasil'),
             Container(
-              margin: const EdgeInsets.only(top: 15),
-              child: Text(
-                '$_kelvin',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            const Text('Suhu dalam Reamor'),
-            Container(
-              margin: const EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.only(top: 8),
               child: Text(
                 '$_reamur',
                 style: const TextStyle(
