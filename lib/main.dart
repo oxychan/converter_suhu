@@ -14,8 +14,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   double _inputUser = 0;
-  double _kelvin = 0;
-  double _reamur = 0;
+  double _result = 0;
+  List<Widget> resultList = [];
+  var temperatureUnits = ["Kelvin", "Reamur", "Fahrenheit"];
+  String selected = 'Kelvin';
 
   final inputController = TextEditingController();
 
@@ -25,16 +27,59 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       if (_globalKey.currentState!.validate()) {
         _inputUser = double.parse(inputController.text);
-        _reamur = _inputUser * (4 / 5);
-        _kelvin = _inputUser + 273;
+
+        switch (selected) {
+          case "Kelvin":
+            {
+              _result = _inputUser + 273;
+              resultList.add(
+                ListTile(
+                  leading: const CircleAvatar(
+                    child: Text("K"),
+                  ),
+                  title: Text('$_inputUser celcius => $_result Kelvin'),
+                ),
+              );
+            }
+            break;
+
+          case "Reamur":
+            {
+              _result = 4 / 5 * _inputUser;
+              resultList.add(
+                ListTile(
+                  leading: const CircleAvatar(
+                    child: Text("R"),
+                  ),
+                  title: Text('$_inputUser Celcius => $_result Reamur'),
+                ),
+              );
+            }
+            break;
+
+          case "Fahrenheit":
+            {
+              _result = (9 / 5 * _inputUser) + 32;
+              resultList.add(
+                ListTile(
+                  leading: const CircleAvatar(
+                    child: Text("R"),
+                  ),
+                  title: Text('$_inputUser Celcius => $_result Fahrenheit'),
+                ),
+              );
+            }
+            break;
+        }
       }
     });
   }
 
-  @override
-  void dispose() {
-    inputController.dispose();
-    super.dispose();
+  _dropDownChanged(value) {
+    setState(() {
+      selected = value.toString();
+      _convert();
+    });
   }
 
   @override
@@ -64,20 +109,17 @@ class _MyAppState extends State<MyApp> {
                         inputController: inputController,
                       ),
                       DropdownButton<String>(
-                        items: [
-                          DropdownMenuItem(
-                              value: "Kelvin",
-                              child: Container(child: Text("Kelvin"))),
-                          DropdownMenuItem(
-                              value: "Reamur",
-                              child: Container(child: Text("Reamur"))),
-                        ],
-                        value: 'Kelvin',
-                        onChanged: (String? value) {},
+                        items: temperatureUnits.map((String value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        value: selected,
+                        onChanged: _dropDownChanged,
                       ),
                       Result(
-                        kelvin: _kelvin,
-                        reamur: _reamur,
+                        result: _result,
                       ),
                       Convert(
                         convertHandler: _convert,
@@ -89,15 +131,25 @@ class _MyAppState extends State<MyApp> {
                   child: Column(
                     children: [
                       Container(
-                        child: Text('Riwayat Konversi'),
+                        margin: const EdgeInsets.symmetric(vertical: 25),
+                        child: const Text(
+                          'Riwayat Konversi',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       Expanded(
-                        child: ListView(
-                          children: [
-                            Text('testing 1'),
-                            Text('testing 2'),
-                            Text('testing 3'),
-                          ],
+                        child: ListView.builder(
+                          itemCount: resultList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: resultList[index],
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
